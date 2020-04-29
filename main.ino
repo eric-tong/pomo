@@ -1,4 +1,6 @@
-int LED = 3;
+int LED_PIN = 3;
+int BUTTON_PIN = 12;
+
 int MAX_BRIGHTNESS = 255;
 int INCREMENT = 5;
 
@@ -7,20 +9,27 @@ int delta = 5;
 
 void setup()
 {
+    pinMode(BUTTON_PIN, INPUT);
 }
 
 void loop()
 {
-    if (brightness <= 0)
+    if (digitalRead(BUTTON_PIN) == HIGH)
     {
-        delta = INCREMENT;
+        if (brightness <= 0)
+        {
+            delta = INCREMENT;
+        }
+        else if (brightness >= MAX_BRIGHTNESS)
+        {
+            delta = -INCREMENT;
+        }
+        brightness += delta;
     }
-    else if (brightness >= MAX_BRIGHTNESS)
+    else
     {
-        delta = -INCREMENT;
+        brightness = 0;
     }
-    brightness += delta;
-
-    analogWrite(LED, brightness);
+    analogWrite(LED_PIN, brightness);
     delay(30);
 }
