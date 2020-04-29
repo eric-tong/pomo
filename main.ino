@@ -1,5 +1,5 @@
+int BUTTON_PIN = 0;
 int LED_PIN = 3;
-int BUTTON_PIN = 12;
 
 int MAX_BRIGHTNESS = 255;
 int INCREMENT = 5;
@@ -7,14 +7,25 @@ int INCREMENT = 5;
 int brightness = 0;
 int delta = 5;
 
+bool pressState = false;
+bool isActive = true;
+
 void setup()
 {
-    pinMode(BUTTON_PIN, INPUT);
+    Serial.begin(9600);
 }
 
 void loop()
 {
-    if (digitalRead(BUTTON_PIN) == HIGH)
+    bool isPressed = analogRead(BUTTON_PIN) < 800;
+    if (pressState && !isPressed)
+    {
+        Serial.println("Toggle State");
+        isActive = !isActive;
+    }
+    pressState = isPressed;
+
+    if (isActive)
     {
         if (brightness <= 0)
         {
